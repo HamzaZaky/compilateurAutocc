@@ -126,13 +126,13 @@ opt_statements:
 
 
 statement:
-	cell ASSIGN expression
+	cell ASSIGN exp
 		{
 			if (fst $1) != 0 then error "assigned x must be 0";
 			if (snd $1) != 0 then error "assigned Y must be 0";
 			SET_CELL (0, $3)
 		}
-|	ID ASSIGN expression
+|	ID ASSIGN exp
 		{
 		    let num_reg = declare_var $1 in
 		    SET_VAR (num_reg, $3)
@@ -180,9 +180,19 @@ cell:
 			($2, $4)
 		}
 ;
-loop : 	WHEN condition COMMA expression loop {NOP}
+loop : 	
+		WHEN condition COMMA expression loop 
+			{NOP}
 |		OTHERWISE
+			{NOP}
 ;
+exp : 
+		expression loop
+			{NONE}
+|		expression 
+			{$1}
+;
+
 expression:
   expression ADD terme
     { BINOP(OP_ADD, $1, $3) }
