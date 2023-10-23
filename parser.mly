@@ -180,7 +180,9 @@ cell:
 			($2, $4)
 		}
 ;
-
+loop : 	WHEN condition COMMA expression loop {NOP}
+|		OTHERWISE
+;
 expression:
   expression ADD terme
     { BINOP(OP_ADD, $1, $3) }
